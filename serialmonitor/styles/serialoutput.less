@@ -1,0 +1,37 @@
+@import "ui-variables";
+
+.serialmonitor .serialoutput {
+  width: 100%;
+  height: 30%;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  padding: 10px 10px 80px 10px;
+  border-top: 1px solid @base-border-color;
+  background: inherit;
+
+  .control-row {
+    margin-bottom: 1em;
+    vertical-align: bottom;
+  }
+
+  #sendbutton {
+    float: left;
+    margin-right: 10px;
+    vertical-align: bottom;
+  }
+
+  #output {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  #sendtype {
+    float: left;
+    margin-right: 10px;
+  }
+
+  #append {
+    float: right;
+    margin-left: 10px
+  }
+}

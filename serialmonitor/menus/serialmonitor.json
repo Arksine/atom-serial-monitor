@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Open Serial Monitor",
+        "command": "serialmonitor:open"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "Serial Monitor",
+          "submenu": [
+            {
+              "label": "Open",
+              "command": "serialmonitor:open"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
