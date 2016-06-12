@@ -3,7 +3,8 @@
 items = [
   { id: 'connect', menu: 'Connect', icon: 'icon-zap', type: 'active'}
   { id: 'disconnect', menu: 'Disconnect', icon: 'icon-plug', type: 'inactive'}
-  { id: 'portsettings', menu: 'Port Settings', icon: 'icon-settings', type: 'active'}
+  { id: 'portsettings', menu: 'Port Settings', icon: 'icon-settings',
+  type: 'active'}
 ]
 
 class MenuItem extends View
@@ -28,7 +29,7 @@ class MenuView extends View
         @subview item.id, new MenuItem(item)
 
   click: (id) ->
-    if !(@find("#menu#{id}").hasClass('inactive'))
+    if ! (@find("#menu#{id}").hasClass('inactive'))
       @parentView["#{id}MenuClick"]()
 
   activate: (type, active) ->
@@ -37,5 +38,12 @@ class MenuView extends View
       menuItems.removeClass('inactive')
     else
       menuItems.addClass('inactive')
+    return
 
+  toggleMenuItem: (itemId, active) ->
+    menuItem = @find("#menu#{itemId}")
+    if active
+      menuItem.removeClass('inactive')
+    else
+      menuItems.addClass('inactive')
     return

@@ -11,12 +11,14 @@ class SerialOutputView extends View
       @div class: 'block', =>
         @div class: 'control-row', =>
           @button id: 'sendbutton', class: 'btn', click: 'click', "Send"
-          @select id: 'sendtype', class: 'form-control inline-block', outlet: 'sendType', =>
+          @select id: 'sendtype', class: 'form-control inline-block',
+          outlet: 'sendType', =>
             @option value: 'Ascii', 'Ascii'
             @option value: 'Hex', 'Hex'
             @option value: 'Dec', 'Dec'
             @option value: 'Bin', 'Bin'
-          @select id: 'append', class: 'form-control inline-block', outlet: 'appendEnd', =>
+          @select id: 'append', class: 'form-control inline-block',
+          outlet: 'appendEnd', =>
             @option value: 'None', 'No Line Ending'
             @option value: 'CRLF', 'CRLF'
             @option value: 'LF', 'LF'
@@ -28,7 +30,7 @@ class SerialOutputView extends View
 
   initialize: (params) ->
 
-  
+
 
   click: ->
     text = @outputView.getText()

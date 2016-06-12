@@ -1,95 +1,88 @@
 @import "ui-variables";
-
 .serialmonitor .dialog {
-  position: absolute;
-  bottom: -20%;
-  right: 20%;
-  left: 20%;
-  background: @inset-panel-background-color;
-  border: 1px solid @inset-panel-border-color;
-  border-radius: 4px;
-  padding: 15px;
-  opacity: 0.95;
-  display: none;
-  z-index: 10;
-
-  &.active {
-    display: block;
-  }
-
-  .body {
-    margin-bottom: 15px;
-  }
-
-  .heading {
-    margin-bottom: 15px;
-
-    strong {
-      color: @text-color-highlight;
-      display: inline-block;
-    }
-
-    i.icon {
-      float: right;
-      width: 0;
-      margin-right: 15px;
-    }
-  }
-
-  .warningText {
-    color: @text-color-warning;
-    &:hover {
-      color: @text-color-error;
-    }
-  }
-
-  button {
-    background: transparent;
-    border: 1px solid transparent;
+    position: absolute;
+    bottom: -20%;
+    right: 20%;
+    left: 20%;
+    background: @inset-panel-background-color;
+    border: 1px solid @inset-panel-border-color;
     border-radius: 4px;
-    color: @text-color;
-    margin-right: 10px;
-    &:hover {
-      color: @text-color-highlight;
+    padding: 15px;
+    opacity: 0.95;
+    display: none;
+    z-index: 10;
+    &.active {
+        display: block;
     }
-  }
-
-  .column {
-    display: inline-block;
-    padding-right: 20%;
-    vertical-align: top;
-
-    &.last {
-      padding-right: 0;
+    .body {
+        margin-bottom: 15px;
     }
-  }
-
-  .form-control {
-    width: 100%;
-  }
-
-  .dialog-control {
-    padding-bottom: 1em;
-
-    .setting-title {
-      margin-bottom: .2em;
-      margin-bottom: auto;
-
+    .heading {
+        margin-bottom: 15px;
+        strong {
+            color: @text-color-highlight;
+            display: inline-block;
+        }
+        i.icon {
+            float: right;
+            width: 0;
+            margin-right: 15px;
+        }
     }
-  }
-
-  .conn-locked.text-disabled {
-    .setting-title {
-      opacity: .5;
-      pointer-events: none;
-      cursor: default;
+    .warningText {
+        color: @text-color-warning;
+        &:hover {
+            color: @text-color-error;
+        }
     }
-  }
-
-  input[disabled],
-  select[disabled] {
-    opacity: .5;
-    pointer-events: none;
-    cursor: default;
-  }
+    .bottom-button {
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: @text-color;
+        margin-right: 10px;
+        &:hover {
+            color: @text-color-highlight;
+        }
+    }
+    .column {
+        display: inline-block;
+        padding-right: 5%;
+        vertical-align: top;
+        &.last {
+            padding-right: 0;
+        }
+    }
+    .form-control {
+        width: 100%;
+    }
+    .dialog-control {
+        padding-bottom: 1em;
+        .setting-title {
+            margin-bottom: 0.2em;
+            margin-bottom: auto;
+        }
+    }
+    .conn-locked.text-disabled {
+        .setting-title {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: default;
+        }
+    }
+    input[disabled],
+    select[disabled] {
+        opacity: 0.5;
+        pointer-events: none;
+        cursor: default;
+    }
+    #refreshbtn {
+        float: right;
+        margin-left: 10px;
+        vertical-align: bottom;
+    }
+    span {
+        display: block;
+        overflow-x: hidden;
+    }
 }

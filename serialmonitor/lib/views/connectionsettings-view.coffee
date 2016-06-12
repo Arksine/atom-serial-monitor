@@ -3,9 +3,10 @@
 module.exports =
 class ConnectionSettingsView extends View
   @content: ->
-   @div class: 'connectionsettings', =>
-     @div class: 'horizontal-control inline-block', =>
-       @button id: 'btnConnect', class: 'btn icon icon-zap', click: 'connect', 'Connect'
+    @div class: 'connectionsettings', =>
+      @div class: 'horizontal-control inline-block', =>
+        @button id: 'btnConnect', class: 'btn icon icon-zap',
+        click: 'connect', 'Connect'
 
 
 

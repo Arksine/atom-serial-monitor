@@ -11,7 +11,6 @@ module.exports = Serialmonitor =
 
   activate: (state) ->
     console.log 'SerialMonitor: activate'
-
     atom.workspace.onDidChangeActivePaneItem (item) => @updateViews()
 
     @subscriptions = new CompositeDisposable
@@ -19,9 +18,10 @@ module.exports = Serialmonitor =
     @subscriptions.add atom.commands.add 'atom-workspace',
       'serialmonitor:open': => @openView()
 
+
+
   deactivate: ->
     @subscriptions.dispose()
-
 
   serialize: ->
 

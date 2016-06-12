@@ -1,7 +1,7 @@
 {View} = require "atom-space-pen-views"
 
 bytetoHex = (byte) ->
-  return ('0' + (byte & 0xFF).toString(16)).slice(-2)
+  return ('0' + (byte & 0xFF).toString(16)).slice( - 2)
 
 class TextLine extends View
   @content: (params) ->
@@ -15,22 +15,22 @@ class TextLine extends View
 
  add: (byte) ->
    if (byte is '\n' or '\r')
-     @hextext.innerHtml += byte;
+     @hextext.innerHtml += byte
    else
      hexString = bytetoHex(byte)
-     @hextext.innerHtml += hexString;
+     @hextext.innerHtml += hexString
 
    @asciitext.innerHtml += byte
    return
 
 module.exports =
-class SerialInputView extends View
+class SerialReceivedView extends View
   currentLine: undefined
   hexEnabled: off
   asciiEnabled: on
 
   @content: ->
-    @div class: 'serialinput'
+    @div class: 'serialreceived'
 
   @initialize: (params) ->
     hexEnabled = params.hex
@@ -46,9 +46,9 @@ class SerialInputView extends View
     #TODO: I may need to handle carraige returns better here
     @currentLine.add(byte)
     if byte is '\n'
-        # we have a new line, so create a new text line
-        currentLine = new TextLine(hexOn: hexEnabled, asciiOn: asciiEnabled)
-        @append currentLine
+      # we have a new line, so create a new text line
+      currentLine = new TextLine(hexOn: hexEnabled, asciiOn: asciiEnabled)
+      @append currentLine
     return
 
   toggleHex: ->

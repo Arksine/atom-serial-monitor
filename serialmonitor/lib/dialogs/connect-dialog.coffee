@@ -24,12 +24,12 @@ class ConnectDialog extends Dialog
         @strong 'Connection Settings'
       @div class: 'body', =>
         @div class: 'horizontal-control', =>
-          @label class:'setting-title', 'Serial Port:'
+          @label class: 'setting-title', 'Serial Port:'
           @select id: 'ports', class: 'form-control', outlet: 'oPort', =>
             @option value: '0', 'No Ports Detected'
         @div class: "column", =>
           @div class: 'horizontal-control', =>
-            @label class:'setting-title', 'Baud:'
+            @label class: 'setting-title', 'Baud:'
             @select id: 'ports', class: 'form-control', outlet: 'oBaud', =>
               @option value: '50', '50'
               @option value: '75', '75'
@@ -49,19 +49,21 @@ class ConnectDialog extends Dialog
               @option value: '57600', '57600'
               @option value: '115200', '115200'
           @div class: 'horizontal-control', =>
-            @label class:'setting-title', 'Data Bits:'
-            @select id: 'databits', class: 'form-control', outlet: 'oDatabits', =>
+            @label class: 'setting-title', 'Data Bits:'
+            @select id: 'databits', class: 'form-control',
+            outlet: 'oDatabits', =>
               @option value: '8', '8'
               @option value: '7', '7'
               @option value: '6', '6'
               @option value: '5', '5'
           @div class: 'horizontal-control', =>
-            @label class:'setting-title', 'Stop Bits:'
-            @select id: 'stopbits', class: 'form-control', outlet: 'oStopbits', =>
+            @label class: 'setting-title', 'Stop Bits:'
+            @select id: 'stopbits', class: 'form-control',
+            outlet: 'oStopbits', =>
               @option value: '1', '1'
               @option value: '2', '2'
           @div class: 'horizontal-control', =>
-            @label class:'setting-title', 'Parity:'
+            @label class: 'setting-title', 'Parity:'
             @select id: 'parity', class: 'form-control', outlet: 'oParity', =>
               @option value: 'none', 'None'
               @option value: 'even', 'Even'
@@ -104,7 +106,7 @@ class ConnectDialog extends Dialog
     portsettings.baudRate = parseInt(@oBaud.val())
     portsettings.dataBits = parseInt(@oDatabits.val())
     portsettings.stopBits = parseInt(@oStopbits.val())
-    portsettings.parity = @oParity.val();
+    portsettings.parity = @oParity.val()
     portsettings.rtscts = @oRtsCts.is(":checked")
     portsettings.xon = @oXon.is(":checked")
     portsettings.xoff = @oXoff.is(":checked")
