@@ -27,16 +27,16 @@ class PortSettingsDialog extends Dialog
         @i class: 'icon icon-x clickable', click: 'cancel'
         @strong 'Serial Port Settings'
       @div class: 'body', =>
-        @div class: 'dialog-control conn-locked', =>
-          @label class: 'setting-title', 'Serial Port:'
-          @div =>
+        @div class: "flex-ports", =>
+          @div class: 'dialog-control conn-locked', =>
+            @label class: 'setting-title', 'Serial Port:'
+            @select id: 'ports', class: 'form-control',
+            outlet: 'oPort', =>
+              @option value: '0', 'No Ports Detected'
+          @div class: 'conn-locked', =>
             @button id: 'refreshbtn', class: 'btn',
             click: 'requestPortList', 'Refresh'
-            @span =>
-              @select id: 'ports', class: 'form-control',
-              outlet: 'oPort', =>
-                @option value: '0', 'No Ports Detected'
-        @div class: "column", =>
+        @div class: "flex-row", =>
           @div class: 'dialog-control', =>
             @label class: 'setting-title', 'Baud:'
             @select id: 'baud', class: 'form-control', outlet: 'oBaud',
@@ -58,7 +58,11 @@ class PortSettingsDialog extends Dialog
               @option value: '38400', '38400'
               @option value: '57600', '57600'
               @option value: '115200', '115200'
-        @div class: "column", =>
+              @option value: '230400', '230400'
+              @option value: '460800', '460800'
+              @option value: '500000', '500000'
+              @option value: '576000', '576000'
+              @option value: '921600', '921600'
           @div class: 'dialog-control conn-locked', =>
             @label class: 'setting-title', 'Data Bits:'
             @select id: 'databits', class: 'form-control',
@@ -67,7 +71,6 @@ class PortSettingsDialog extends Dialog
               @option value: '7', '7'
               @option value: '6', '6'
               @option value: '5', '5'
-        @div class: "column", =>
           @div class: 'dialog-control conn-locked', =>
             @label class: 'setting-title', 'Stop Bits:'
             @select id: 'stopbits', class: 'form-control',
@@ -75,7 +78,6 @@ class PortSettingsDialog extends Dialog
               @option value: '1', '1'
               @option value: '1.5', '1.5'
               @option value: '2', '2'
-        @div class: "column", =>
           @div class: 'dialog-control conn-locked', =>
             @label class: 'setting-title', 'Parity:'
             @select id: 'parity', class: 'form-control', outlet: 'oParity', =>
@@ -84,10 +86,9 @@ class PortSettingsDialog extends Dialog
               @option value: 'odd', 'Odd'
               @option value: 'mark', 'Mark'
               @option value: 'space', 'Space'
-        @div class: 'column last', =>
           @div class: 'dialog-control conn-locked', =>
             @label class: 'setting-title', 'Flow Control:'
-            @select id: 'parity', class: 'form-control', outlet: 'oFlow', =>
+            @select id: 'flow', class: 'form-control', outlet: 'oFlow', =>
               @option value: 'none', 'None'
               @option value: 'xonxoff', 'Xon/Xoff'
               @option value: 'rtscts', 'RTS/CTS'
@@ -112,6 +113,14 @@ class PortSettingsDialog extends Dialog
         outlet: 'oCancelBtn', =>
           @i class: 'icon icon-x'
           @span 'Cancel'
+        @button class: 'bottom-button', click: 'test',
+        outlet: 'oTest', =>
+          @i class: 'icon icon-zap'
+          @span 'Test'
+
+  test: ->
+    @toggleConnected(!@connected)
+
 
   activate: ->
     if @initialsettings is undefined
@@ -199,7 +208,7 @@ class PortSettingsDialog extends Dialog
   #TODO:  need to change this on apply, not here
   onSettingChanged: (event, element) ->
     id = element.attr('id')
-    console.log("#{id} changed to:")
+
     if @connected is true
       set = {setting: undefined, value: undefined}
       set.setting = id
@@ -207,7 +216,7 @@ class PortSettingsDialog extends Dialog
         set.value = parseInt(element.val())
       else
         set.value = element.is(":checked")
-      console.log(set.value)
+      console.log("#{id} changed to:", set.value)
       @parentView.onPortSettingUpdated(set)
     return
 
@@ -216,10 +225,11 @@ class PortSettingsDialog extends Dialog
     @connected = isConnected
     if @connected
       @find('.conn-locked').addClass('text-disabled')
-      @find('.conn-locked input').attr('disabled', '')
-      @find('.conn-locked select').attr('disabled', '')
-      oCancelBtn.hide()
+      @find('.conn-locked input').prop('disabled', true)
+      @find('.conn-locked select').prop('disabled', true)
+      @find('.conn-locked button').prop('disabled', true)
+      @oCancelBtn.hide()
     else
       @find('.conn-locked').removeClass('text-disabled')
-      @find('.conn-locked :disabled').removeAttr('disabled')
-      oCancelBtn.show()
+      @find('.conn-locked :disabled').prop('disabled', false)
+      @oCancelBtn.show()

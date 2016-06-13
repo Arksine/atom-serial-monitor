@@ -1,7 +1,7 @@
 @import "ui-variables";
 .serialmonitor .dialog {
     position: absolute;
-    bottom: -20%;
+    top: 20%;
     right: 20%;
     left: 20%;
     background: @inset-panel-background-color;
@@ -45,24 +45,15 @@
             color: @text-color-highlight;
         }
     }
-    .column {
-        display: inline-block;
-        padding-right: 5%;
-        vertical-align: top;
-        &.last {
-            padding-right: 0;
-        }
-    }
+
     .form-control {
         width: 100%;
     }
-    .dialog-control {
-        padding-bottom: 1em;
-        .setting-title {
-            margin-bottom: 0.2em;
-            margin-bottom: auto;
-        }
+
+    .setting-title {
+        margin-bottom: 0.2em;
     }
+
     .conn-locked.text-disabled {
         .setting-title {
             opacity: 0.5;
@@ -70,19 +61,45 @@
             cursor: default;
         }
     }
+
+    button[disabled],
     input[disabled],
     select[disabled] {
         opacity: 0.5;
         pointer-events: none;
         cursor: default;
     }
-    #refreshbtn {
-        float: right;
+
+    .flex-ports {
+      height: 4em;
+      width: 100%;
+      margin-bottom: .7em;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: flex-end;
+
+      .dialog-control {
+        flex-grow: 100;
+      }
+
+      button {
         margin-left: 10px;
-        vertical-align: bottom;
+      }
     }
-    span {
-        display: block;
-        overflow-x: hidden;
+
+    .flex-row {
+      height: 4em;
+      width: 100%;
+      margin-bottom: .7em;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+
+      .dialog-control {
+        flex-basis: 18%;
+      }
     }
 }
