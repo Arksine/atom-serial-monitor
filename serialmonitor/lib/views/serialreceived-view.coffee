@@ -1,27 +1,30 @@
 {View} = require "atom-space-pen-views"
 
 bytetoHex = (byte) ->
-  return ('0' + (byte & 0xFF).toString(16)).slice( - 2)
+  hexstr = '0' + (byte.charCodeAt(0) & 0xFF).toString(16)
+  return hexstr.slice( - 2)
 
 class TextLine extends View
   @content: (params) ->
-    @div class: "line hex", =>
-      @pre outlet: "hextext"
-    @div class: "line ascii", =>
-      @pre outlet: "asciitext"
+    @div =>
+      @div class: "line hex", outlet: 'hexline'
+      @div class: "line ascii", =>
+        @pre outlet: "asciitext", ''
 
-    @hextext.hide() unless params.hexOn is on
-    @asciitext.hide() unless params.asciiOn is on
+    #@hextext.hide() unless params.hexOn is on
+    #@asciitext.hide() unless params.asciiOn is on
 
- add: (byte) ->
-   if (byte is '\n' or '\r')
-     @hextext.innerHtml += byte
-   else
-     hexString = bytetoHex(byte)
-     @hextext.innerHtml += hexString
+  add: (byte) ->
+    hexblock = "<pre>" + bytetoHex(byte) + "</pre>"
+    @hexline.append(hexblock)
 
-   @asciitext.innerHtml += byte
-   return
+    ascout = byte
+    if (byte == '\r')
+      ascout = "<sup>\\r</sup>"
+    else if (byte == '\n')
+      ascout = "<sup>\\n</sup>"
+    @asciitext.append(ascout)
+    return
 
 module.exports =
 class SerialReceivedView extends View
@@ -32,11 +35,11 @@ class SerialReceivedView extends View
   @content: ->
     @div class: 'serialreceived'
 
-  @initialize: (params) ->
-    hexEnabled = params.hex
-    asciiEnabled = params.ascii
-    currentLine = new TextLine(hexOn: hexEnabled, asciiOn: asciiEnabled)
-    @append currentLine
+  initialize: (params) ->
+    @hexEnabled = params.hex
+    @asciiEnabled = params.ascii
+    @currentLine = new TextLine(hexOn: @hexEnabled, asciiOn: @asciiEnabled)
+    @append @currentLine
 
   clearAll: ->
     @find('>.line').remove()
@@ -47,24 +50,25 @@ class SerialReceivedView extends View
     @currentLine.add(byte)
     if byte is '\n'
       # we have a new line, so create a new text line
-      currentLine = new TextLine(hexOn: hexEnabled, asciiOn: asciiEnabled)
-      @append currentLine
+      @currentLine = new TextLine(hexOn: @hexEnabled, asciiOn: @asciiEnabled)
+      @append @currentLine
+      @scrollToBottom()
     return
 
   toggleHex: ->
-    if hexEnabled is on
-      hexEnabled = off
+    if @hexEnabled is on
+      @hexEnabled = off
       @find('>.line.hex').hide()
     else
-      hexEnabled = on
+      @hexEnabled = on
       @find('>.line.hex').show()
     return
 
   toggleAscii: ->
-    if asciiEnabled is on
-      hexEnabled = off
+    if @asciiEnabled is on
+      @hexEnabled = off
       @find('>.line.ascii').hide()
     else
-      hexEnabled = on
+      @hexEnabled = on
       @find('>.line.ascii').show()
     return

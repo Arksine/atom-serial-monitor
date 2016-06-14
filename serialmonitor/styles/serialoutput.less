@@ -10,28 +10,29 @@
   background: inherit;
 
   .control-row {
-    margin-bottom: 1em;
-    vertical-align: bottom;
-  }
-
-  #sendbutton {
-    float: left;
-    margin-right: 10px;
-    vertical-align: bottom;
-  }
-
-  #output {
-    overflow-x: hidden;
+    height: 4em;
     width: 100%;
-  }
+    margin-bottom: .7em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
 
-  #sendtype {
-    float: left;
-    margin-right: 10px;
-  }
+    #sendbutton {
+      margin-right: 10px;
+    }
 
-  #append {
-    float: right;
-    margin-left: 10px
+    #sendtype {
+      margin-right: 10px;
+    }
+
+    #append {
+      margin-left: 10px;
+    }
+
+    atom-text-editor {
+      flex-grow: 100;
+    }
   }
 }

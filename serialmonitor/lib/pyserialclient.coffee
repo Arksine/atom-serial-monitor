@@ -49,21 +49,23 @@ class SerialPort
       console.log("Port List Received.")
       parent.onPortListReceived(data))
     @socket.on('port_connected', (connection_success) ->
-      console.log("Serial Port Connected.")
       if connection_success is 'true'
+        console.log("Serial Port Connected.")
         that.serialPortConnected = true
-        parent.onPortConnected()
       else
+        console.log("Error connecting")
         that.serialPortConnected = false
-        #TODO: show an error dialog that the connection failed
+      parent.onPortConnected(that.serialPortConnected)
     )
     @socket.on('port_disconnected' , () ->
       console.log("Serial Port Disconnected")
       that.serialPortConnected = false
       parent.onPortDisconnected()
     )
-    @socket.on('serial_recieved', (data)->
-      parent.onSerialReceived(data))
+    @socket.on('serial_received', (data) ->
+      console.log("Serial Recd: ", data)
+      parent.onSerialReceived(data)
+    )
 
   destroy: ->
     @pySerialServer.end((err) ->

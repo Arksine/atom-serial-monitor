@@ -11,7 +11,7 @@ class MenuItem extends View
   @content: (item) ->
     klass = if item.type is 'active' then '' else 'inactive'
 
-    @div class: "item #{klass}", id: "menu#{item.id}", click: 'click', =>
+    @div class: "item #{klass}", id: "menu#{item.id}",  click:  'click',  =>
       @div class: "icon large #{item.icon}"
       @div item.menu
 
@@ -45,5 +45,5 @@ class MenuView extends View
     if active
       menuItem.removeClass('inactive')
     else
-      menuItems.addClass('inactive')
+      menuItem.addClass('inactive')
     return

@@ -3,38 +3,47 @@ import socketio
 import eventlet
 from eventlet import wsgi
 import serial
-from serial import threaded
 from serial.tools import list_ports
 
+eventlet.monkey_patch()
 
-class Streamer(threaded.Protocol):
-    """
-    Stream binary data from the serial port.  As the data is received, it is
-    emitted over socket io
-    """
 
-    def __init__(self):
-        self.transport = None
-        self.sid = None
+class SerialReader(object):
 
-    def connection_made(self, transport):
-        """Store transport"""
-        self.transport = transport
+    def __init__(self, serial_instance, sio_in, sid_in):
+        self.serial = serial_instance
+        self.sio = sio_in
+        self.sid = sid_in
+        self.started = False
+        self.serThread = None
 
-    def connection_lost(self, exc):
-        """Forget transport"""
-        self.transport = None
-        super(Streamer, self).connection_lost(exc)
+    def start(self):
+        self.started = True
+        self.serThread = eventlet.spawn_n(self.read_from_port)
 
-    def data_received(self, data):
-        sio.emit('serialreceived', data, self.sid)
+    def stop(self):
+        self.started = False
 
-    def set_sid(self, inSid):
-        self.sid = inSid
+    def read_from_port(self):
+        while self.serial.is_open and self.started:
+            if self.serial.in_waiting > 0:
+                try:
+                    data = self.serial.read(self.serial.in_waiting)
+                except serial.SerialException as e:
+                    # probably some I/O problem such as disconnected USB serial
+                    # adapters -> exit
+                    print(e)
+                    self.sio.emit('port_disconnected')
+                    break
+                else:
+                    self.sio.emit('serial_received', data, self.sid)
 
-sio = socketio.Server()
+            eventlet.sleep(.005)
+
+
+sio = socketio.Server(logger=True)
 ser = serial.Serial()
-serialThread = threaded.ReaderThread(ser, Streamer)
+serialReader = None
 
 
 def set_data_bits(dbs):
@@ -123,29 +132,42 @@ def connect_serial(sid, data):
     try:
         ser.open()
     except serial.SerialException:
-        sio.emit('connected', 'false', sid)
+        sio.emit('port_connected', 'false', sid)
         return
 
     if ser.is_open:
-        serialThread.start()
-        t, proto = serialThread.connect()
-        proto.set_sid(sid)
-        sio.emit('connected', 'true', sid)
+        global serialReader
+        if serialReader != None:
+            del(serialReader)
+        serialReader = SerialReader(ser, sio, sid)
+        serialReader.start()
+        sio.emit('port_connected', 'true', sid)
     else:
-        sio.emit('connected', 'false', sid)
+        sio.emit('port_connected', 'false', sid)
     return
 
 
 @sio.on('disconnect_serial')
-def disconnect_serial(sid, data):
-    serialThread.close()
+def disconnect_serial(sid):
+    if ser.is_open:
+        global serialReader
+        serialReader.stop()
+        del(serialReader)
+        serialReader = None
+        ser.close()
     sio.emit('port_disconnected', room=sid)
     return
 
 
 @sio.on('write_to_serial')
 def write_to_serial(sid, data):
-    serialThread.write(data)
+    if type(data) is unicode:
+        # Unicode Text received, send as ascii
+        ser.write(data.encode('ascii'))
+    else:
+        # Node.js buffer received
+        ser.write(data)
+    return
 
 
 @sio.on('update_serial_setting')

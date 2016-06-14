@@ -19,7 +19,8 @@ class SerialmonitorView extends View
       @subview 'menuView', new MenuView()
       @subview 'terminalSettings', new TerminalSettingsView()
       @div class: 'terminal', outlet: 'terminalView', =>
-        @subview 'serialInputView', new SerialReceivedView()
+        @subview 'serialReceivedView',
+        new SerialReceivedView({hex: off, ascii: on} )
         @subview 'portSettingsDialog', new PortSettingsDialog()
       @subview 'serialOutputView', new SerialOutputView()
 
@@ -42,19 +43,19 @@ class SerialmonitorView extends View
 
   connectMenuClick: ->
     if @portsettings != undefined && @portsettings.port != '0'
-      @port.connectPort(portsettings)
+      @menuView.toggleMenuItem('connect', off)
+      @port.connectPort(@portsettings)
+      #TODO: Show connecting indicator
     else
-      #TODO: change this to build in atom/electron dialog if possible
       alert('Please select a valid serial port.')
     return
 
   disconnectMenuClick: ->
+    @menuView.toggleMenuItem('disconnect', off)
     @port.disconnectPort()
     return
 
   portsettingsMenuClick: ->
-    #if @portsettings == undefined
-      #@requestPortList()
     @portSettingsDialog.activate()
     return
 
@@ -63,7 +64,7 @@ class SerialmonitorView extends View
     return
 
   writeToSerial: (data) ->
-    @port.writeToSerial(data)
+    @port.write(data)
 
   # port dialog callbacks
   onPortSettingsApplied: (portsettings) ->
@@ -76,20 +77,24 @@ class SerialmonitorView extends View
 
   # SocketIO callbacks
   onSerialReceived: (data) ->
-    #for i in data
-      # TODO: call the function to add characters to the serial input view
+    for i in data
+      @serialReceivedView.addByte(i)
     return
 
-  onPortConnected: ->
-    @portSettingsDialog.toggleConnected(true)
-    @menuView.toggleMenuItem('connect', off)
-    @menuView.toggleMenuItem('disconnect', on)
+  onPortConnected: (connected) ->
+    if connected
+      @portSettingsDialog.toggleConnected(true)
+      @menuView.toggleMenuItem('disconnect', on)
+      #TODO: show "connected" in status bar
+    else
+      @menuView.toggleMenuItem('connect', off)
+      alert("Error connecting to Serial Port")
     return
 
   onPortDisconnected: ->
     @portSettingsDialog.toggleConnected(false)
     @menuView.toggleMenuItem('connect', on)
-    @menuView.toggleMenuItem('disconnect', off)
+    #TODO: show "disconnected" in status bar
     return
 
   onPortListReceived: (portlist) ->
