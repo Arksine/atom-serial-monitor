@@ -16,7 +16,6 @@ module.exports = Serialmonitor =
 
   activate: (state) ->
     console.log 'SerialMonitor: activate'
-    #atom.workspace.onDidChangeActivePaneItem (item) => @updateViews()
 
     #TODO: retreive stored data here.
 
