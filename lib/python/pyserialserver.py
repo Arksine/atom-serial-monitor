@@ -90,6 +90,12 @@ def connect(sid, environ):
 @sio.on('disconnect')
 def disconnect(sid):
     print('disconnect ', sid)
+    if ser.is_open:
+        global serialReader
+        serialReader.stop()
+        del(serialReader)
+        serialReader = None
+        ser.close()
     quit()
 
 

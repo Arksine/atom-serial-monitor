@@ -5,14 +5,15 @@ bytetoHex = (byte) ->
   return hexstr.slice( - 2)
 
 class TextLine extends View
-  @content: (params) ->
+  @content: ->
     @div =>
       @div class: "line hex", outlet: 'hexline'
-      @div class: "line ascii", =>
+      @div class: "line ascii", outlet: 'asciiline', =>
         @pre outlet: "asciitext", ''
 
-    @hexline.hide() unless params.hexOn is on
-    @asciitext.hide() unless params.asciiOn is on
+  initialize: (cfg) ->
+    @hexline.hide() unless cfg.hexEnabled is on
+    @asciiline.hide() unless cfg.asciiEnabled is on
 
   add: (byte) ->
     hexblock = "<pre>" + bytetoHex(byte) + "</pre>"
@@ -35,24 +36,33 @@ class SerialReceivedView extends View
   @content: ->
     @div class: 'serialreceived'
 
-  initialize: (params) ->
-    @hexEnabled = params.hex
-    @asciiEnabled = params.ascii
-    @currentLine = new TextLine(hexOn: @hexEnabled, asciiOn: @asciiEnabled)
+  initialize: (cfg) ->
+    @hexEnabled = cfg.hexEnabled
+    @asciiEnabled = cfg.asciiEnabled
+    @currentLine = new TextLine(cfg)
     @append @currentLine
+
+  update: (cfg) ->
+    @clearAll()
+    @initialize(cfg)
 
   clearAll: ->
     @find('.line').remove()
     return
 
   addByte: (byte) ->
-    #TODO: I may need to handle carraige returns better here
     @currentLine.add(byte)
+
+    #TODO: I may need to handle carraige returns better here
     if byte is '\n'
       # we have a new line, so create a new text line
-      @currentLine = new TextLine(hexOn: @hexEnabled, asciiOn: @asciiEnabled)
+      @currentLine = new TextLine(hexEnabled: @hexEnabled,
+      asciiEnabled: @asciiEnabled)
       @append @currentLine
       @scrollToBottom()
+
+    #xscroll = @scrollLeft() + @width()
+    #@scrollLeft(xscroll)
     return
 
   toggleHex: ->

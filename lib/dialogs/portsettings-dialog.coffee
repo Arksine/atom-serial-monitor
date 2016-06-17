@@ -1,25 +1,12 @@
 Dialog = require './dialog'
 {$} = require 'atom-space-pen-views'
 
-portsettings =
-{
-  port: '0'
-  baud: 9600
-  databits: 8
-  stopbits: 1
-  parity: 'none'
-  xonxoff: false
-  rtscts: false
-  dsrdtr: false
-  dtr: true
-  rts: true
-}
-#TODO: Add button to refresh com ports
 module.exports =
 class PortSettingsDialog extends Dialog
   connected: false
   enabled: true
   initialsettings: undefined
+  portsettings: undefined
 
   @content: ->
     @div class: 'dialog', =>
@@ -113,20 +100,38 @@ class PortSettingsDialog extends Dialog
         outlet: 'oCancelBtn', =>
           @i class: 'icon icon-x'
           @span 'Cancel'
-        @button class: 'bottom-button', click: 'test',
-        outlet: 'oTest', =>
-          @i class: 'icon icon-zap'
-          @span 'Test'
 
-  test: ->
-    @toggleConnected(!@connected)
+  initialize: (cfg) ->
+    @portsettings = cfg
+    @setHtmlControls(cfg)
 
+  update: (cfg) ->
+    @initialize(cfg)
+
+  setHtmlControls: (settings) ->
+    @oPort.val(settings.port)
+    @oBaud.val(settings.baud.toString())
+    @oDatabits.val(settings.databits.toString())
+    @oStopbits.val(settings.stopbits)
+    @oParity.val(settings.parity)
+    @oFlow.val(settings.flowcontrol)
+    @oDtr.prop("checked", settings.dtr)
+    @oRts.prop("checked", settings.rts)
+
+    if settings.xonxoff == true
+      @oFlow.val('xonxoff')
+    else if settings.rtscts == true
+      @oFlow.val('rtscts')
+    else if settings.dsrdtr == true
+      @oFlow.val('dsrdtr')
+    else
+      @oFlow.val('none')
 
   activate: ->
     if @initialsettings is undefined
-      @initialsettings = Object.assign({} , portsettings)
+      @initialsettings = Object.assign({} , @portsettings)
     else
-      Object.assign(@initialsettings, portsettings)
+      Object.assign(@initialsettings, @portsettings)
     return super()
 
   requestPortList: ->
@@ -145,63 +150,56 @@ class PortSettingsDialog extends Dialog
           value: item.port,
           text: item.description
           } ))
-    if @initialsettings != undefined
-      @initialsettings.port = @oPort.val()
+
+    # see if the old value exists after the list is refreshed
+    currentport = @portsettings.port
+    exists = false
+    @find('#ports option').each( () ->
+      if this.value == currentport
+        exists = true)
+
+    if exists
+      @oPort.val(currentport)
     else
-      portsettings.port = @oPort.val()
+      @portsettings.port = @oPort.val()
+      if @initialsettings != undefined
+        @initialsettings.port = @oPort.val()
     return
 
   apply: ->
-    portsettings.port = @oPort.val()
-    portsettings.baud = parseInt(@oBaud.val())
-    portsettings.databits = parseInt(@oDatabits.val())
-    portsettings.stopbits = @oStopbits.val()
-    portsettings.parity = @oParity.val()
-    portsettings.flowcontrol = @oFlow.val()
-    portsettings.dtr = @oDtr.is(":checked")
-    portsettings.rts = @oRts.is(":checked")
+    @portsettings.port = @oPort.val()
+    @portsettings.baud = parseInt(@oBaud.val())
+    @portsettings.databits = parseInt(@oDatabits.val())
+    @portsettings.stopbits = @oStopbits.val()
+    @portsettings.parity = @oParity.val()
+    @portsettings.flowcontrol = @oFlow.val()
+    @portsettings.dtr = @oDtr.is(":checked")
+    @portsettings.rts = @oRts.is(":checked")
 
     switch @oFlow.val()
       when 'none'
-        portsettings.xonxoff = false
-        portsettings.rtscts = false
-        portsettings.dsrdtr = false
+        @portsettings.xonxoff = false
+        @portsettings.rtscts = false
+        @portsettings.dsrdtr = false
       when 'xonxoff'
-        portsettings.xonxoff = true
-        portsettings.rtscts = false
-        portsettings.dsrdtr = false
+        @portsettings.xonxoff = true
+        @portsettings.rtscts = false
+        @portsettings.dsrdtr = false
       when 'rtscts'
-        portsettings.xonxoff = false
-        portsettings.rtscts = true
-        portsettings.dsrdtr = false
+        @portsettings.xonxoff = false
+        @portsettings.rtscts = true
+        @portsettings.dsrdtr = false
       when 'dsrdtr'
-        portsettings.xonxoff = false
-        portsettings.rtscts = false
-        portsettings.dsrdtr = true
-    @parentView.onPortSettingsApplied(portsettings)
+        @portsettings.xonxoff = false
+        @portsettings.rtscts = false
+        @portsettings.dsrdtr = true
     @deactivate()
     return
 
   cancel: ->
     # return the options to initial settings and do not update
-    Object.assign(portsettings, @initialsettings)
-    @oPort.val(portsettings.port)
-    @oBaud.val(portsettings.baud.toString())
-    @oDatabits.val(portsettings.databits.toString())
-    @oStopbits.val(portsettings.stopbits)
-    @oParity.val(portsettings.parity)
-    @oFlow.val(portsettings.flowcontrol)
-    @oDtr.prop("checked", portsettings.dtr)
-    @oRts.prop("checked", portsettings.rts)
-
-    if portsettings.xonxoff == true
-      @oFlow.val('xonxoff')
-    else if portsettings.rtscts == true
-      @oFlow.val('rtscts')
-    else if portsettings.dsrdtr == true
-      @oFlow.val('dsrdtr')
-    else
-      @oFlow.val('none')
+    Object.assign(@portsettings, @initialsettings)
+    @setHtmlControls(@portsettings)
     @deactivate()
     return
 

@@ -18,36 +18,49 @@ hexStringToBin = (data) ->
   return result
 
 module.exports =
-class SerialOutputView extends View
-  outEditor: undefined
+class SerialSendView extends View
+  config: undefined
 
-  @content: (params) ->
-
-    @div class: 'serialoutput', =>
+  @content: ->
+    @div class: 'serialsend', =>
       @div class: 'control-row', =>
         @button id: 'sendbutton', class: 'btn', click: 'send', "Send"
         @select id: 'sendtype', class: 'form-control inline-block',
-        outlet: 'sendType', =>
+        change: 'onItemChanged', outlet: 'sendType', =>
           @option value: 'ascii', 'Ascii'
           @option value: 'hex', 'Hex'
           #@option value: 'dec', 'Dec'
           #@option value: 'bin', 'Bin'
         @subview 'outputView', new TextEditorView(mini: true,
         placeholderText: 'Enter Ascii text or Hex...')
-        @select id: 'append', class: 'form-control inline-block',
-        outlet: 'appendEnd', =>
+        @select id: 'endline', class: 'form-control inline-block',
+        change: 'onItemChanged', outlet: 'endLine', =>
           @option value: 'None', 'No Line Ending'
           @option value: 'CRLF', 'CRLF'
           @option value: 'LF', 'LF'
           @option value: 'CR', 'CR'
 
-  initialize: (params) ->
+  initialize: (cfg) ->
+    @config = cfg
+    @sendType.val(@config.sendType)
+    @endLine.val(@config.endLine)
+
+  update: (cfg) ->
+    @initialize(cfg)
+
+  onItemChanged: (event, element) ->
+    id = element.attr('id')
+    switch id
+      when 'sendtype'
+        @config.sendType = element.val()
+      when 'endline'
+        @config.endLine = element.val()
 
   send: ->
     text = @outputView.getText()
 
     if @sendType.val() == 'ascii'
-      switch @appendEnd.val()
+      switch @endLine.val()
         when 'CRLF'
           text += '\r' + '\n'
         when 'LF'
@@ -60,7 +73,7 @@ class SerialOutputView extends View
     else
       converted = hexStringToBin(text)
       if converted
-        switch @appendEnd.val()
+        switch @endLine.val()
           when 'CRLF'
             converted.push(0x0d)
             converted.push(0x0a)
