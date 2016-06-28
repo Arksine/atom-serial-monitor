@@ -1,10 +1,34 @@
 @import "ui-variables";
 
 .serialmonitor .connectionsettings {
-  padding-left: 1em;
-  height: 3em;
+  height: auto;
   background: inherit;
   border-bottom: 1px solid @base-border-color;
+
+  .icon-button {
+    display: inline-block;
+    margin-right: 5px;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    -webkit-user-select: none;
+
+    &:hover {
+      color: @text-color-highlight;
+    }
+
+    &.inactive, &.inactive:hover {
+      opacity: .5;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    div {
+      text-align: center;
+      width: 100%;
+      min-width: 60px;
+    }
+  }
 
   .horizontal-control {
     margin-top: .4em;
@@ -18,4 +42,59 @@
     }
   }
 
+  .setting-title {
+    font-size: 1.1em;
+    margin-bottom: 0;
+    margin-right: 5px;
+  }
+
+  .conn-locked.text-disabled {
+      &.setting-title {
+          opacity: 0.5;
+          pointer-events: none;
+          cursor: default;
+      }
+  }
+
+  button[disabled],
+  input[disabled],
+  select[disabled] {
+      opacity: 0.5;
+      pointer-events: none;
+      cursor: default;
+  }
+
+  .flex-column {
+    height: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+
+  .flex-box {
+    height: auto;
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    #connect,
+    .form-control{
+      margin-right: 15px;
+    }
+
+    #ports {
+      flex-basis: 25%
+    }
+  }
+
+  .checkbox {
+    margin: 0;
+    padding-right: 5px;
+  }
 }

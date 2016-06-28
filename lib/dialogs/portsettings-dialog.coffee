@@ -114,7 +114,6 @@ class PortSettingsDialog extends Dialog
     @oDatabits.val(settings.databits.toString())
     @oStopbits.val(settings.stopbits)
     @oParity.val(settings.parity)
-    @oFlow.val(settings.flowcontrol)
     @oDtr.prop("checked", settings.dtr)
     @oRts.prop("checked", settings.rts)
 
@@ -172,7 +171,6 @@ class PortSettingsDialog extends Dialog
     @portsettings.databits = parseInt(@oDatabits.val())
     @portsettings.stopbits = @oStopbits.val()
     @portsettings.parity = @oParity.val()
-    @portsettings.flowcontrol = @oFlow.val()
     @portsettings.dtr = @oDtr.is(":checked")
     @portsettings.rts = @oRts.is(":checked")
 
