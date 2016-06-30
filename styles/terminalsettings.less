@@ -1,22 +1,49 @@
 @import "ui-variables";
 
-.serialmonitor .terminalsettings {
+.serial-monitor .terminalsettings {
 
-  height: 3em;
+  height: auto;
+  padding: 7px 5px 7px 5px;
   background: inherit;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
 
-  .btn {
-    &.tab-button {
-      border: 0;
-      padding: 0 0 0 0;
-      height: 3em;
-      width: 10vw;
-      border-radius: 0;
+  .btn.selected {
+    &#hex {
+      //background: @background-color-info;
+    }
+    &#dec {
+      //background: @background-color-success;
+    }
 
-      &.selected {
-        background: @input-background-color;
-        border: 0;
-      }
+    &#bin {
+      //background: @background-color-warning;
+      
     }
   }
+
+  .clear {
+    margin-left: 10px;
+  }
+
+  .checkbox {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0px 10px 0px 10px;
+
+    input[type="checkbox"] {
+      margin-right: .5em;
+    }
+
+    .setting-title {
+      margin: 0;
+      padding: 0;
+    }
+
+  }
+
 }

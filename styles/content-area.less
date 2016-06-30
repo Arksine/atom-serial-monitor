@@ -1,0 +1,59 @@
+@import "ui-variables";
+
+.serial-monitor .content-area {
+  height: 100%;
+  width: 100%;
+  background: inherit;
+  position: relative;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+
+  flex-grow: 100;
+
+  .head-marker {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+    padding-top: 1px;
+    padding-left: 5px;
+    background: @input-background-color;
+
+    pre,
+    span {
+      font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+      cursor: text;
+      font-size: 14px;
+      color: @text-color-highlight;
+      background: @background-color-selected;
+      flex-shrink: 0;
+    }
+
+    .bin-spacing {
+      width: 10ch;
+      text-align: center;
+      border: 1px solid @base-border-color;
+    }
+
+    .dec-spacing {
+      width: 5ch;
+      text-align: center;
+      border: 1px solid @base-border-color;
+    }
+
+    .hex-spacing {
+      width: 4ch;
+      text-align: center;
+      border: 1px solid @base-border-color;
+    }
+
+    .asc-spacing {
+      text-align: left;
+      border: none;
+      display: inline-block;
+    }
+  }
+}

@@ -36,7 +36,8 @@ class SerialReader(object):
                     self.sio.emit('port_disconnected')
                     break
                 else:
-                    self.sio.emit('serial_received', data, self.sid)
+                    self.sio.emit('serial_received', data.decode('latin_1'),
+                    self.sid)
 
             eventlet.sleep(.005)
 
@@ -134,6 +135,7 @@ def connect_serial(sid, data):
     ser.xonxoff = data['xonxoff']
     ser.rtscts = data['rtscts']
     ser.dsrdtr = data['dsrdtr']
+    ser.write_timeout = 2.0
 
     try:
         ser.open()
@@ -168,11 +170,18 @@ def disconnect_serial(sid):
 @sio.on('write_to_serial')
 def write_to_serial(sid, data):
     if type(data) is unicode:
-        # Unicode Text received, send as ascii
-        ser.write(data.encode('ascii'))
+        # Unicode Text received, send as latin-1(retains byte data)
+        try:
+            ser.write(data.encode('latin_1'))
+        except Serial.SerialTimeoutException:
+            print "Write timed out"
+
     else:
         # Node.js buffer received
-        ser.write(data)
+        try:
+            ser.write(data)
+        except Serial.SerialTimeoutException:
+            print "Write timed out"
     return
 
 

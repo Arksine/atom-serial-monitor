@@ -1,21 +1,29 @@
 {
-    "name": "serialmonitor",
-    "main": "./lib/serialmonitor",
-    "version": "0.0.1",
-    "description": "A Serial Monitor for Atom",
+    "name": "atom-serial-monitor",
+    "main": "./lib/serial-monitor",
+    "version": "0.0.2",
+    "description": "A serial monitor for atom",
     "keywords": [],
     "activationCommands": {
-        "atom-workspace": "serialmonitor:open"
+        "atom-workspace": "serial-monitor:open"
     },
-    "repository": "https://github.com/Arksine/atom-serialmonitor",
+    "repository": "https://github.com/atom/atom-serial-monitor",
     "license": "MIT",
     "engines": {
         "atom": ">=1.0.0 <2.0.0"
     },
     "dependencies": {
-        "atom-space-pen-views": "^2.2.0",
+        "etch": "^0.6.0",
         "socket.io-client": "^1.4.6",
         "python-shell": "^0.4.0",
-        "diskdb": "^0.1.14"
+        "diskdb": "^0.1.14",
+        "calculate-size":"^0.2.0"
+    },
+    "consumedServices": {
+      "status-bar": {
+        "versions": {
+          "^1.0.0": "consumeStatusBar"
+        }
+      }
     }
 }

@@ -1,7 +1,7 @@
 @import "ui-variables";
-.serialmonitor .dialog {
+.serial-monitor .portsettings {
     position: absolute;
-    top: 20%;
+    top: 30%;
     right: 20%;
     left: 20%;
     background: @inset-panel-background-color;
@@ -54,14 +54,7 @@
         margin-bottom: 0.2em;
     }
 
-    .conn-locked.text-disabled {
-        .setting-title {
-            opacity: 0.5;
-            pointer-events: none;
-            cursor: default;
-        }
-    }
-
+    .text-disabled,
     button[disabled],
     input[disabled],
     select[disabled] {

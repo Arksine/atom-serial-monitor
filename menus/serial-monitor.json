@@ -3,7 +3,13 @@
     "atom-text-editor": [
       {
         "label": "Open Serial Monitor",
-        "command": "serialmonitor:open"
+        "command": "serial-monitor:open"
+      }
+    ],
+    ".serial-monitor .serialreceived": [
+      {
+        "label": "Copy",
+        "command": "serial-monitor:copy"
       }
     ]
   },
@@ -16,7 +22,7 @@
           "submenu": [
             {
               "label": "Open",
-              "command": "serialmonitor:open"
+              "command": "serial-monitor:open"
             }
           ]
         }

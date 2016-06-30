@@ -1,0 +1,8 @@
+{
+    "atom-workspace": {
+        "ctrl-alt-o": "serial-monitor:open"
+    },
+    ".serial-monitor":{
+      "alt-c":"serial-monitor:copy"
+    }
+}

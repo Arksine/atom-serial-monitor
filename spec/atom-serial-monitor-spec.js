@@ -1,44 +1,44 @@
 'use babel';
 
-import Serialmonitor from '../lib/serialmonitor';
+import AtomSerialMonitor from '../lib/atom-serial-monitor';
 
 // Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 //
 // To run a specific `it` or `describe` block add an `f` to the front (e.g. `fit`
 // or `fdescribe`). Remove the `f` to unfocus the block.
 
-describe('Serialmonitor', () => {
+describe('AtomSerialMonitor', () => {
   let workspaceElement, activationPromise;
 
   beforeEach(() => {
     workspaceElement = atom.views.getView(atom.workspace);
-    activationPromise = atom.packages.activatePackage('serialmonitor');
+    activationPromise = atom.packages.activatePackage('atom-serial-monitor');
   });
 
-  describe('when the serialmonitor:toggle event is triggered', () => {
+  describe('when the atom-serial-monitor:toggle event is triggered', () => {
     it('hides and shows the modal panel', () => {
       // Before the activation event the view is not on the DOM, and no panel
       // has been created
-      expect(workspaceElement.querySelector('.serialmonitor')).not.toExist();
+      expect(workspaceElement.querySelector('.atom-serial-monitor')).not.toExist();
 
       // This is an activation event, triggering it will cause the package to be
       // activated.
-      atom.commands.dispatch(workspaceElement, 'serialmonitor:toggle');
+      atom.commands.dispatch(workspaceElement, 'atom-serial-monitor:toggle');
 
       waitsForPromise(() => {
         return activationPromise;
       });
 
       runs(() => {
-        expect(workspaceElement.querySelector('.serialmonitor')).toExist();
+        expect(workspaceElement.querySelector('.atom-serial-monitor')).toExist();
 
-        let serialmonitorElement = workspaceElement.querySelector('.serialmonitor');
-        expect(serialmonitorElement).toExist();
+        let atomSerialMonitorElement = workspaceElement.querySelector('.atom-serial-monitor');
+        expect(atomSerialMonitorElement).toExist();
 
-        let serialmonitorPanel = atom.workspace.panelForItem(serialmonitorElement);
-        expect(serialmonitorPanel.isVisible()).toBe(true);
-        atom.commands.dispatch(workspaceElement, 'serialmonitor:toggle');
-        expect(serialmonitorPanel.isVisible()).toBe(false);
+        let atomSerialMonitorPanel = atom.workspace.panelForItem(atomSerialMonitorElement);
+        expect(atomSerialMonitorPanel.isVisible()).toBe(true);
+        atom.commands.dispatch(workspaceElement, 'atom-serial-monitor:toggle');
+        expect(atomSerialMonitorPanel.isVisible()).toBe(false);
       });
     });
 
@@ -51,11 +51,11 @@ describe('Serialmonitor', () => {
       // workspaceElement to the DOM are generally slower than those off DOM.
       jasmine.attachToDOM(workspaceElement);
 
-      expect(workspaceElement.querySelector('.serialmonitor')).not.toExist();
+      expect(workspaceElement.querySelector('.atom-serial-monitor')).not.toExist();
 
       // This is an activation event, triggering it causes the package to be
       // activated.
-      atom.commands.dispatch(workspaceElement, 'serialmonitor:toggle');
+      atom.commands.dispatch(workspaceElement, 'atom-serial-monitor:toggle');
 
       waitsForPromise(() => {
         return activationPromise;
@@ -63,10 +63,10 @@ describe('Serialmonitor', () => {
 
       runs(() => {
         // Now we can test for view visibility
-        let serialmonitorElement = workspaceElement.querySelector('.serialmonitor');
-        expect(serialmonitorElement).toBeVisible();
-        atom.commands.dispatch(workspaceElement, 'serialmonitor:toggle');
-        expect(serialmonitorElement).not.toBeVisible();
+        let atomSerialMonitorElement = workspaceElement.querySelector('.atom-serial-monitor');
+        expect(atomSerialMonitorElement).toBeVisible();
+        atom.commands.dispatch(workspaceElement, 'atom-serial-monitor:toggle');
+        expect(atomSerialMonitorElement).not.toBeVisible();
       });
     });
   });
