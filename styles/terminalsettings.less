@@ -20,26 +20,31 @@
 
     &#bin {
       //background: @background-color-warning;
-      
+
     }
   }
 
   .clear {
-    margin-left: 10px;
+    margin-left: 5%;
   }
 
   .checkbox {
+    & + .checkbox {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-start;
     align-items: center;
-    margin: 0px 10px 0px 10px;
+    margin-left: 5%;
 
     input[type="checkbox"] {
       margin-right: .5em;
     }
 
     .setting-title {
+      font-size: 1.1em;
       margin: 0;
       padding: 0;
     }

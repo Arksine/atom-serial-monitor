@@ -37,7 +37,7 @@ class SerialReader(object):
                     break
                 else:
                     self.sio.emit('serial_received', data.decode('latin_1'),
-                    self.sid)
+                                  self.sid)
 
             eventlet.sleep(.005)
 
@@ -145,7 +145,7 @@ def connect_serial(sid, data):
 
     if ser.is_open:
         global serialReader
-        if serialReader != None:
+        if serialReader is not None:
             del(serialReader)
         serialReader = SerialReader(ser, sio, sid)
         serialReader.start()
@@ -173,14 +173,14 @@ def write_to_serial(sid, data):
         # Unicode Text received, send as latin-1(retains byte data)
         try:
             ser.write(data.encode('latin_1'))
-        except Serial.SerialTimeoutException:
+        except serial.SerialTimeoutException:
             print "Write timed out"
 
     else:
         # Node.js buffer received
         try:
             ser.write(data)
-        except Serial.SerialTimeoutException:
+        except serial.SerialTimeoutException:
             print "Write timed out"
     return
 
@@ -197,6 +197,4 @@ def update_serial_setting(sid, data):
 
 if __name__ == '__main__':
     app = socketio.Middleware(sio)
-
-    # deploy as an gevent WSGI server using websockets
-    wsgi.server(eventlet.listen(('127.0.0.1', 8000)), app)
+    wsgi.server(eventlet.listen(('127.0.0.1', 8000)), app, max_size=1)
